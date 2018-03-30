@@ -1,0 +1,53 @@
+package com.yxt.bigdata.etl.connector.rdbms.reader
+
+import com.typesafe.config.Config
+import org.apache.spark.sql.{DataFrame, SparkSession, Column}
+
+import com.yxt.bigdata.etl.connector.base.ETLReader
+import com.yxt.bigdata.etl.connector.base.db.DBUtil
+
+
+class RdbReader(conf: Config) extends DBUtil(conf) with ETLReader {
+  val tableName: String = conf.getString(Key.TABLE_NAME)
+
+  val columns: Array[String] = {
+    conf.getString(Key.COLUMNS).split(",").map(_.trim.toLowerCase)
+  }
+
+  val predicatesConf: Config = conf.getConfig(Key.PREDICATES)
+
+  override def getDataFrame(spark: SparkSession): DataFrame = {
+    var df: DataFrame = null
+
+    val typeName = predicatesConf.getString(Key.PREDICATES_TYPE).trim
+    if ("long".equals(typeName)) {
+      val predicates = PredicatesParser.parseLongFieldParser(predicatesConf)
+      val (columnName, lowerBound, upperBound, numPartitions) = predicates
+      df = spark.read.jdbc(
+        jdbcUrl,
+        tableName,
+        columnName,
+        lowerBound,
+        upperBound,
+        numPartitions,
+        jdbcProperties
+      )
+    } else {
+      val predicates = PredicatesParser.parseCustomPredicates(predicatesConf)
+      df = spark.read.jdbc(
+        jdbcUrl,
+        tableName,
+        predicates,
+        jdbcProperties
+      )
+    }
+
+    // 列名最小化
+    val loweredColumns = df.columns.map(col => col.toLowerCase)
+    df.toDF(loweredColumns: _*)
+    // 输出schema
+    df.printSchema()
+
+    df.selectExpr(columns: _*)
+  }
+}

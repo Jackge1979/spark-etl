@@ -1,0 +1,66 @@
+package com.yxt.bigdata.etl.connector.rdbms.reader
+
+import com.typesafe.config.Config
+import com.yxt.bigdata.etl.connector.base.AdvancedConfig
+
+object PredicatesParser {
+  def parseCustomPredicates(predicatesConf: Config): Array[String] = {
+    /*
+    type: custom
+
+    "predicates": {
+      "type": "custom",
+      "rules": [
+        ...
+      ]
+    }
+     */
+    AdvancedConfig.getStringArray(predicatesConf, Key.PREDICATES_RULES)
+  }
+
+  def parseLongFieldPredicates(predicatesConf: Config): (String, Long, Long, Int) = {
+    /*
+    type: long
+
+    "predicates": {
+      "type": "long",
+      "rules": {
+        "columnName": "...",
+        "lowerBound": "...",
+        "upperBound": "...",
+        "numPartitions": "..."
+      }
+    }
+     */
+    val columnName = AdvancedConfig.getString(predicatesConf, Key.PREDICATES_RULES + "." + "columnName")
+    val lowerBound = AdvancedConfig.getString(predicatesConf, Key.PREDICATES_RULES + "." + "lowerBound").toLong
+    val upperBound = AdvancedConfig.getString(predicatesConf, Key.PREDICATES_RULES + "." + "upperBound").toLong
+    val numPartition = AdvancedConfig.getInt(predicatesConf, Key.PREDICATES_RULES + "." + "numPartitions")
+    (columnName, lowerBound, upperBound, numPartition)
+  }
+
+  def parseUUIDPredicates(predicatesConf: Config): Array[String] = {
+    /*
+    type: uuid
+
+    "predicates": {
+      "type": "uuid",
+      "rules": {
+        "columnName": "..."
+      }
+    }
+     */
+    val columnName = AdvancedConfig.getString(predicatesConf, Key.PREDICATES_RULES + "." + "columnName")
+    var predicates = Array[String](s"$columnName<'0'", s"$columnName>='z'")
+
+    val ascii = Array.concat((48 to 57).toArray, (97 to 122).toArray)
+    val topChars = ascii.map(_.toChar.toString)
+    for (i <- 0 until topChars.length - 1) {
+      val start = topChars(i)
+      val end = topChars(i + 1)
+      predicates :+= s"$columnName>='$start' AND $columnName<'$end'"
+    }
+
+    predicates
+  }
+}

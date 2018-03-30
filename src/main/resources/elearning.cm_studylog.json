@@ -1,0 +1,32 @@
+{
+  "reader": [
+    {
+      "name": "oraclereader",
+      "connection": {
+        "username": "devops",
+        "password": "TWSuNrtPByVpqBd1",
+        "jdbcUrl": "jdbc:oracle:thin:@//10.200.60.70:1521/yxtdb",
+        "driver": "oracle.jdbc.driver.OracleDriver"
+      },
+      "predicates": {
+        "type": "date",
+        "rules": {
+          "startYear": "2016",
+          "startMonth": "08",
+          "endYear": "2018",
+          "endMonth": "03",
+          "columnName": "studydatetime"
+        }
+      },
+      "tableName": "elearning.cm_studylog",
+      "columns": "*",
+      "where": "to_char(studydatetime, 'yyyy-MM-dd')>='2018-03-01'"
+    }
+  ],
+  "writer": {
+    "name": "hivewriter",
+    "tableName": "elearning.cm_studylog",
+    "columns": "*",
+    "writeMode": "overwrite"
+  }
+}

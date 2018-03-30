@@ -1,0 +1,33 @@
+{
+  "reader": [
+    {
+      "name": "oraclereader",
+      "connection": {
+        "username": "devops",
+        "password": "TWSuNrtPByVpqBd1",
+        "jdbcUrl": "jdbc:oracle:thin:@//10.200.60.70:1521/yxtdb",
+        "driver": "oracle.jdbc.driver.OracleDriver"
+      },
+      "predicates": {
+        "type": "custom",
+        "rules": [
+          "id<'5'",
+          "id>='5' and id<'a'",
+          "id>='a' and id<'f'",
+          "id>='f' and id<'m'",
+          "id>='m' and id<'r'",
+          "id>='r' and id<'w'",
+          "id>='w'"
+        ]
+      },
+      "tableName": "elearning.sty_userstudyplan",
+      "columns": "id,orgid,name,description,parentplanid,executoruserid,executorname,plannedstartdate,actualstartdate,plannedenddate,actualenddate,studyresultdesc,submitdate,status,checkuserid,checkusername,checktime,checkremark,totalknowledgecount,totalfinishedknowledgecount,studyuploadfileids,laststudytime,totalmuststudycount,finishedmuststudycount,standardstudyhours,actualstudyhours,presscount,totaldeductscore,deductremark,errorremark,totalexamcount,finishedexamcount,getscoremode,lastuserknowledgeid,createuserid,createusername,createdate,updateuserid,updateusername,updatedate,viewurl,studyorderindex,totalcoursecount,finishedcoursecount,standardstudyscore,actualstudyscore,getscoreproportion,progress,totalexamscore,curversion"
+    }
+  ],
+  "writer": {
+    "name": "hivewriter",
+    "tableName": "elearning.sty_userstudyplan",
+    "columns": "id,orgid,name,description,parentplanid,executoruserid,executorname,plannedstartdate,actualstartdate,plannedenddate,actualenddate,studyresultdesc,submitdate,status,checkuserid,checkusername,checktime,checkremark,totalknowledgecount,totalfinishedknowledgecount,studyuploadfileids,laststudytime,totalmuststudycount,finishedmuststudycount,standardstudyhours,actualstudyhours,presscount,totaldeductscore,deductremark,errorremark,totalexamcount,finishedexamcount,getscoremode,lastuserknowledgeid,createuserid,createusername,createdate,updateuserid,updateusername,updatedate,viewurl,studyorderindex,totalcoursecount,finishedcoursecount,standardstudyscore,actualstudyscore,getscoreproportion,progress,totalexamscore,curversion",
+    "writeMode": "replace"
+  }
+}

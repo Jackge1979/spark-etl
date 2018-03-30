@@ -1,0 +1,29 @@
+{
+  "reader": [
+    {
+      "name": "mysqlreader",
+      "connection": {
+        "username": "yxt",
+        "password": "pwdasdwx",
+        "jdbcUrl": "jdbc:mysql://172.17.128.172:3306/skyeye?autoReconnect=true&useSSL=false",
+        "driver": "com.mysql.jdbc.Driver"
+      },
+      "predicates": "1=1,1=1,1=1,1=1",
+      "tableName": "org",
+      "columns": "pid,orgName"
+    }
+  ],
+  "writer": {
+    "name": "mysqlwriter",
+    "connection": {
+      "username": "yxt",
+      "password": "pwdasdwx",
+      "jdbcUrl": "jdbc:mysql://172.17.128.172:3306/test?autoReconnect=true&useSSL=false",
+      "driver": "com.mysql.jdbc.Driver"
+    },
+    "tableName": "org_test",
+    "columns": "pid,orgName",
+    "writeMode": "replace",
+    "batchSize": 1000
+  }
+}

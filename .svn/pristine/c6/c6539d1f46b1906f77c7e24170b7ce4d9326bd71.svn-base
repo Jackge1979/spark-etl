@@ -1,0 +1,20 @@
+package com.yxt.bigdata.etl.connector.hive.reader
+
+import com.typesafe.config.Config
+import com.yxt.bigdata.etl.connector.base.ETLReader
+import com.yxt.bigdata.etl.connector.base.db.DBUtil
+import org.apache.spark.sql.{DataFrame, SparkSession}
+
+
+class HiveReader(conf: Config) extends ETLReader {
+  override val tableName: String = conf.getString(Key.TABLE_NAME)
+
+  override val columns: Array[String] = {
+    conf.getString(Key.COLUMNS).split(",").map(_.trim.toLowerCase)
+  }
+
+  override def getDataFrame(spark: SparkSession): DataFrame = {
+    val columnsString = columns.mkString(",")
+    spark.sql(s"select $columnsString from $tableName")
+  }
+}

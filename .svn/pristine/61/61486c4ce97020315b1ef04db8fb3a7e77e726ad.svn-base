@@ -1,0 +1,34 @@
+package com.yxt.bigdata.etl.connector.rdbms.reader
+
+import collection.JavaConversions._
+import com.typesafe.config.Config
+import com.yxt.bigdata.etl.connector.base.AdvancedConfig
+
+object PredicatesParser {
+  def parseCustomPredicates(predicatesConf: Config): Array[String] = {
+    /*
+    type: custom
+     */
+    AdvancedConfig.getStringArray(predicatesConf, Key.PREDICATES_RULES)
+  }
+
+  def parseLongFieldPredicates(predicatesConf: Config): (String, Long, Long, Int) = {
+    /*
+    type: long
+     */
+    val columnName = AdvancedConfig.getString(predicatesConf, Key.PREDICATES_RULES + "." + "columnName")
+    val lowerBound = AdvancedConfig.getString(predicatesConf, Key.PREDICATES_RULES + "." + "lowerBound").toLong
+    val upperBound = AdvancedConfig.getString(predicatesConf, Key.PREDICATES_RULES + "." + "upperBound").toLong
+    val numPartition = AdvancedConfig.getInt(predicatesConf, Key.PREDICATES_RULES + "." + "numPatitions")
+    (columnName, lowerBound, upperBound, numPartition)
+  }
+
+  //  def parseUUIDPredicates(predicatesConf: Config):Array[String] = {
+  //    /*
+  //    type: uuid
+  //     */
+  //    val ascii = Array.concat((48 to 57).toArray, (97 to 122).toArray)
+  //    val topChar = ascii.map(_.toChar.toString)
+  //
+  //  }
+}

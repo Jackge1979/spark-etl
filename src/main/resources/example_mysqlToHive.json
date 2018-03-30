@@ -1,0 +1,33 @@
+{
+  "reader": [
+    {
+      "name": "mysqlreader",
+      "connection": {
+        "username": "yxt",
+        "password": "pwdasdwx",
+        "jdbcUrl": "jdbc:mysql://172.17.128.172:3306/skyeye?autoReconnect=true&useSSL=false",
+        "driver": "com.mysql.jdbc.Driver"
+      },
+      "predicates": {
+        "type": "custom",
+        "rules": [
+          "pid<'5'",
+          "pid>='5' and pid<'a'",
+          "pid>='a' and pid<'f'",
+          "pid>='f' and pid<'m'",
+          "pid>='m' and pid<'r'",
+          "pid>='r' and pid<'w'",
+          "pid>='w'"
+        ]
+      },
+      "tableName": "org",
+      "columns": "pid,orgName"
+    }
+  ],
+  "writer": {
+    "name": "hivewriter",
+    "tableName": "elearning.org_test",
+    "columns": "id,orgName",
+    "writeMode": "replace"
+  }
+}

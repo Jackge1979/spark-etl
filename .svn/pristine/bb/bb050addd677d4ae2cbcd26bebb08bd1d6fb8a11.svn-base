@@ -1,0 +1,5 @@
+package com.yxt.bigdata.etl.connector.hive.writer
+
+object Constant {
+  val WORKERS_NUM = 20
+}

@@ -1,0 +1,74 @@
+package com.yxt.bigdata.etl.connector.hive.writer
+
+import java.sql.DriverManager
+
+import com.typesafe.config.Config
+import org.apache.spark.sql.{DataFrame, Row, SparkSession}
+import com.yxt.bigdata.etl.connector.base.ETLWriter
+
+
+class HiveWriter(conf: Config) extends ETLWriter {
+  override val tableName: String = conf.getString(Key.TABLE_NAME)
+
+  override val columns: Array[String] = {
+    conf.getString(Key.COLUMNS).toLowerCase.split(",")
+  }
+
+  override def saveTable(dataFrame: DataFrame): Unit = {
+    createTable(dataFrame)
+    val dataframeWithoutDelims = dropDelims(dataFrame)
+
+    val tmpTableName = genTmpTableName(tableName)
+    dataframeWithoutDelims.createOrReplaceTempView(tmpTableName)
+    dataframeWithoutDelims.sparkSession
+      .sql(s"insert overwrite table $tableName select * from $tmpTableName")
+  }
+
+  def genTmpTableName(originalTableName: String): String = {
+    var tmpTableName: String = null
+    val sepTableName = originalTableName.split("[.]")
+    val len = sepTableName.length
+
+    if (len == 1) tmpTableName = s"tmp_$originalTableName"
+    else if (len == 2) {
+      val Array(_, table) = sepTableName
+      tmpTableName = s"tmp_$table"
+    }
+    else throw new Exception(s"表名配置信息有误，您的表名为：$originalTableName , 而目前支持的表名格式有两种：'database.table' 和 'table'，请检查您的配置并作出修改。")
+
+    tmpTableName
+  }
+
+  def createTable(dataFrame: DataFrame): Unit = {
+    val schema = dataFrame.schema
+    val fields = schema.fields
+
+    val sb = new StringBuilder()
+    for (f <- fields) sb.append(s"${f.name} ${f.dataType.typeName},")
+    val colString = sb.toString
+    val createSql =
+      s"""
+         |CREATE TABLE IF NOT EXISTS
+         |$tableName
+         |(${colString.slice(0, colString.length - 1)})
+         |ROW FORMAT DELIMITED
+         |FIELDS TERMINATED BY '\001'
+         |LINES TERMINATED BY '\n'
+         |STORED AS TEXTFILE
+       """.stripMargin
+    dataFrame.sparkSession.sql(createSql)
+  }
+
+  def dropDelims(dataFrame: DataFrame): DataFrame = {
+    val schema = dataFrame.schema
+    val fields = schema.fields
+    val exprs = new Array[String](fields.length)
+    for (i <- fields.indices) {
+      val field = fields(i)
+      if ("string".equals(field.dataType.typeName)) {
+        exprs(i) = s"regexp_replace(${field.name}, '\\r|\\n|\\001', '') AS ${field.name}"
+      } else exprs(i) = s"${field.name}"
+    }
+    dataFrame.selectExpr(exprs: _*)
+  }
+}

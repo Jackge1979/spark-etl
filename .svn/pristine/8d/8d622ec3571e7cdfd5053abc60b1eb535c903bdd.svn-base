@@ -1,0 +1,41 @@
+{
+  "reader": [
+    {
+      "name": "mysqlreader",
+      "connection": {
+        "username": "yxt",
+        "password": "pwdasdwx",
+        "jdbcUrl": "jdbc:mysql://172.17.128.172:3306/skyeye",
+        "driver": "com.mysql.jdbc.Driver"
+      },
+      "predicates": {
+        "type": "custom",
+        "rules": [
+          "pid<'5'",
+          "pid>='5' and pid<'a'",
+          "pid>='a' and pid<'f'",
+          "pid>='f' and pid<'m'",
+          "pid>='m' and pid<'r'",
+          "pid>='r' and pid<'w'",
+          "pid>='w'"
+        ]
+      },
+      "tableName": "org",
+      "columns": "pid,orgName,industryL1Id,industryL1Name,industryL2Id,industryL2Name,provinceId,provinceName,cityId,cityName,createDate,updateDate,contactphone,expireDate,feeEndDate,thirdId"
+    }
+  ],
+  "writer": {
+    "name": "mysqlwriter",
+    "connection": {
+      "username": "yxt",
+      "password": "pwdasdwx",
+      "jdbcUrl": "jdbc:mysql://172.17.128.172:3306/test",
+      "driver": "com.mysql.jdbc.Driver"
+    },
+    "tableName": "org_test",
+    "columns": "id,name,industryL1Id,industryL1Name,industryL2Id,industryL2Name,provinceId,provinceName,cityId,cityName,createDate,updateDate,contactphone,expireDate,feeEndDate,thirdId",
+    "writeMode": "replace",
+    "batchSize": 1024,
+    "workersNum": 20
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "reader": [
+    {
+      "name": "oraclereader",
+      "connection": {
+        "username": "devops",
+        "password": "TWSuNrtPByVpqBd1",
+        "jdbcUrl": "jdbc:oracle:thin:@//10.200.60.70:1521/yxtdb",
+        "driver": "oracle.jdbc.driver.OracleDriver"
+      },
+      "predicates": {
+        "type": "custom",
+        "rules": [
+          "id<'5'",
+          "id>='5' and id<'a'",
+          "id>='a' and id<'f'",
+          "id>='f' and id<'m'",
+          "id>='m' and id<'r'",
+          "id>='r' and id<'w'",
+          "id>='w'"
+        ]
+      },
+      "tableName": "elearning.core_knowledge",
+      "columns": "id,orgid,knowledgno,title,knowledgetype,knowledgecatalogid,knowledgecatalogname,studyhours,previewlength,sourceid,photourl,filesize,knowledgeurl,knowledgestaticurl,price,knowledgecontent,source,authorid,author,alltags,customtags,internaltags,readcount,summary,downloadcount,standardstudyhours,standardstudyscore,commentcount,supportcount,unsupportcount,attachementurl,status,isneedcheck,statusremark,filetype,isdeleted,isoriginality,isvisiableforuser,ishot,isfree,knowledgefileurl,pagesize,totalcommentscore,totalcommentscorecount,averagecommentscore,favorablecommentcount,favorablecommentrate,favoritedcount,isanonymousaccess,sellermasterid,sellermastername,sellertype,knowledgecatalognameforpath,recheckuserid,recheckusercname,recheckdate,recheckremark,checkuserid,checkusercname,checkdate,isdistributed,distributedate,orginalknowledgeid,distributeorgid,distributesourcetype,expireddate,subsidiaryid,relatedknowledgeids,studypersoncount,orgouid,suitablepositionids,suitablepositionnames,catalogroutingnumber,recommendlevel,copysourceid,distributeorgcode,isexpired,isbuyout,newversionstatus,newversionuploaddate,orgproductpakageid,sharesourceid,sharesourcetype,archivesizetype,isautopigeonhole,ispigeonhole,isaddknowledgetosearch,iscontactcustomer,pagecount,uploaduserid,uploadusername,uploaddate,updateuserid,updateusername,updatedate,lecturesteacherid,lecturesteachername,assigndate,counselorteachernames,xuanyesak,xuanyessk,suitableskillids,suitableskillnames,isnewversion,fileid,issupportapp,isuploadimg,counselorteacherids,isexistexam,contributorsid,contributorsname,version,integral,lowertitle,loweruploadusername,knowledgecode,isallowtoshare"
+    }
+  ],
+  "writer": {
+    "name": "hivewriter",
+    "tableName": "elearning.core_knowledge",
+    "columns": "id,orgid,knowledgno,title,knowledgetype,knowledgecatalogid,knowledgecatalogname,studyhours,previewlength,sourceid,photourl,filesize,knowledgeurl,knowledgestaticurl,price,knowledgecontent,source,authorid,author,alltags,customtags,internaltags,readcount,summary,downloadcount,standardstudyhours,standardstudyscore,commentcount,supportcount,unsupportcount,attachementurl,status,isneedcheck,statusremark,filetype,isdeleted,isoriginality,isvisiableforuser,ishot,isfree,knowledgefileurl,pagesize,totalcommentscore,totalcommentscorecount,averagecommentscore,favorablecommentcount,favorablecommentrate,favoritedcount,isanonymousaccess,sellermasterid,sellermastername,sellertype,knowledgecatalognameforpath,recheckuserid,recheckusercname,recheckdate,recheckremark,checkuserid,checkusercname,checkdate,isdistributed,distributedate,orginalknowledgeid,distributeorgid,distributesourcetype,expireddate,subsidiaryid,relatedknowledgeids,studypersoncount,orgouid,suitablepositionids,suitablepositionnames,catalogroutingnumber,recommendlevel,copysourceid,distributeorgcode,isexpired,isbuyout,newversionstatus,newversionuploaddate,orgproductpakageid,sharesourceid,sharesourcetype,archivesizetype,isautopigeonhole,ispigeonhole,isaddknowledgetosearch,iscontactcustomer,pagecount,uploaduserid,uploadusername,uploaddate,updateuserid,updateusername,updatedate,lecturesteacherid,lecturesteachername,assigndate,counselorteachernames,xuanyesak,xuanyessk,suitableskillids,suitableskillnames,isnewversion,fileid,issupportapp,isuploadimg,counselorteacherids,isexistexam,contributorsid,contributorsname,version,integral,lowertitle,loweruploadusername,knowledgecode,isallowtoshare",
+    "writeMode": "replace"
+  }
+}

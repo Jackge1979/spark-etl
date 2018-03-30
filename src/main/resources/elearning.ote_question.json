@@ -1,0 +1,42 @@
+{
+  "reader": [
+    {
+      "name": "oraclereader",
+      "connection": {
+        "username": "devops",
+        "password": "TWSuNrtPByVpqBd1",
+        "jdbcUrl": "jdbc:oracle:thin:@//10.200.60.70:1521/yxtdb",
+        "driver": "oracle.jdbc.driver.OracleDriver"
+      },
+      "predicates": {
+        "type": "custom",
+        "rules": [
+          "substr(id, 0, 1)='a'",
+          "substr(id, 0, 1)='b'",
+          "substr(id, 0, 1)='c'",
+          "substr(id, 0, 1)='d'",
+          "substr(id, 0, 1)='e'",
+          "substr(id, 0, 1)='f'",
+          "substr(id, 0, 1)='0'",
+          "substr(id, 0, 1)='1'",
+          "substr(id, 0, 1)='2'",
+          "substr(id, 0, 1)='3'",
+          "substr(id, 0, 1)='4'",
+          "substr(id, 0, 1)='5'",
+          "substr(id, 0, 1)='6'",
+          "substr(id, 0, 1)='7'",
+          "substr(id, 0, 1)='8'",
+          "substr(id, 0, 1)='9'"
+        ]
+      },
+      "tableName": "elearning.ote_question",
+      "columns": "id,siteid,orgid,code,questioncontent,questiontype,catalogid,catalogname,catalogpathids,catalogpathnames,scoretype,leveltype,expiredate,minscore,itemcount,itemcodetype,judgetype,answercontent,explaintext,totalanswerqty,rightanswerqty,hardrate,differencerate,creditrate,status,checkuserid,checkusername,checkdate,createuserid,createusername,createdate,updateuserid,updateusername,updatedate,isenable,summary,auditinfo,mediatype,mediaurl,isconverted,maxscore,noordermark,isaddbackup"
+    }
+  ],
+  "writer": {
+    "name": "hivewriter",
+    "tableName": "elearning.ote_question",
+    "columns": "id,siteid,orgid,code,questioncontent,questiontype,catalogid,catalogname,catalogpathids,catalogpathnames,scoretype,leveltype,expiredate,minscore,itemcount,itemcodetype,judgetype,answercontent,explaintext,totalanswerqty,rightanswerqty,hardrate,differencerate,creditrate,status,checkuserid,checkusername,checkdate,createuserid,createusername,createdate,updateuserid,updateusername,updatedate,isenable,summary,auditinfo,mediatype,mediaurl,isconverted,maxscore,noordermark,isaddbackup",
+    "writeMode": "replace"
+  }
+}

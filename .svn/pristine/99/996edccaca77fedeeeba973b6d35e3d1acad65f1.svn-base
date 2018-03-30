@@ -1,0 +1,79 @@
+package com.yxt.bigdata.etl.connector.rdbms.writer
+
+import com.typesafe.config.Config
+import com.yxt.bigdata.etl.connector.base.AdvancedConfig
+import com.yxt.bigdata.etl.connector.base.component.ETLWriter
+import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils.savePartition
+import org.apache.spark.sql.jdbc.JdbcDialects
+import com.yxt.bigdata.etl.connector.base.db.DBUtil
+
+
+class RdbWriter(conf: Config) extends DBUtil(conf) with ETLWriter with Serializable {
+  val tableName: String = AdvancedConfig.getString(conf, Key.TABLE_NAME)
+
+  val columns: Array[String] = {
+    AdvancedConfig.getString(conf, Key.COLUMNS).split(",").map(_.trim)
+  }
+
+  private val batchSize: Int = AdvancedConfig.getIntWithDefaultValue(conf, Key.BATCH_SIZE, Constant.DEFAULT_BATCH_SIZE)
+
+  private val writeMode: String = {
+    val customWriteMode = AdvancedConfig.getString(conf, Key.WRITE_MODE).trim.toLowerCase
+    val isWriteModeLegal = customWriteMode.equals("insert") || customWriteMode.equals("replace")
+    if (!isWriteModeLegal)
+      throw new Exception(s"您所配置的 writeMode: $customWriteMode 错误。因为目前仅支持 replace 或 insert 方式，请检查您的配置并作出修改。")
+
+    // 直接用于SQL中
+    customWriteMode.toUpperCase
+  }
+
+  override def saveTable(dataFrame: DataFrame): Unit = {
+    val writeSql = getWriteRecordSql(columns, writeMode)
+    val rddSchema = dataFrame.schema
+    val dialect = JdbcDialects.get(jdbcUrl)
+    val isolationLevel = 0
+
+    dataFrame.rdd.foreachPartition(iterator =>
+      savePartition(getConnection, tableName, iterator, rddSchema, writeSql, batchSize, dialect, isolationLevel)
+    )
+  }
+
+  private def getWriteRecordSql(columns: Array[String], writeMode: String): String = {
+    val columnsHolder = columns.mkString(",")
+    val valuesHolder = 0.until(columns.length).map(_ => "?").mkString(",")
+
+    if (writeMode == "INSERT") {
+      val onDuplicateKeyUpdateHolder = onDuplicateKeyUpdateString(columns)
+      s"""
+         |$writeMode INTO $tableName
+         |($columnsHolder)
+         |VALUES($valuesHolder)
+         |$onDuplicateKeyUpdateHolder
+     """.stripMargin
+    } else if (writeMode == "REPLACE") {
+      s"""
+         |$writeMode INTO $tableName
+         |($columnsHolder)
+         |VALUES($valuesHolder)
+     """.stripMargin
+    } else ""
+  }
+
+  private def onDuplicateKeyUpdateString(columns: Array[String]): String = {
+    if (columns == null || columns.length < 1) ""
+    else {
+      val sb = new StringBuilder()
+      sb.append("ON DUPLICATE KEY UPDATE")
+      var isFirst = true
+      for (column <- columns) {
+        if (isFirst) isFirst = false
+        else sb.append(",")
+
+        sb.append(s" $column=VALUES($column)")
+      }
+
+      sb.toString
+    }
+  }
+}

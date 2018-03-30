@@ -1,0 +1,28 @@
+package com.yxt.bigdata.etl.connector.hive.writer
+
+import com.typesafe.config.Config
+import org.apache.spark.sql.{DataFrame, SparkSession}
+import com.yxt.bigdata.etl.connector.base.ETLWriter
+
+class HiveWriter(conf: Config) extends ETLWriter {
+  override val tableName: String = conf.getString(Key.TABLE_NAME)
+
+  override val columns: Array[String] = {
+    val cols = conf.getString(Key.COLUMNS).toLowerCase
+    cols.split(",")
+  }
+
+  override def saveTable(dataFrame: DataFrame): Unit = {
+    import java.util.Properties
+    val connectionProperties = new Properties()
+    connectionProperties.setProperty("user", "root")
+    connectionProperties.setProperty("password", "yxtHDC")
+    connectionProperties.setProperty("driver", "org.apache.hadoop.hive.jdbc.HiveDriver")
+    val df = dataFrame.sparkSession.read.jdbc(
+      "jdbc:hive2://172.17.128.62:10000",
+      "elearning.core_organizationprofile",
+      connectionProperties
+    )
+    df.printSchema()
+  }
+}

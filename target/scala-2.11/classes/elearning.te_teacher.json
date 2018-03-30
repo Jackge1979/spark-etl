@@ -1,0 +1,33 @@
+{
+  "reader": [
+    {
+      "name": "oraclereader",
+      "connection": {
+        "username": "devops",
+        "password": "TWSuNrtPByVpqBd1",
+        "jdbcUrl": "jdbc:oracle:thin:@//10.200.60.70:1521/yxtdb",
+        "driver": "oracle.jdbc.driver.OracleDriver"
+      },
+      "predicates": {
+        "type": "custom",
+        "rules": [
+          "id<'5'",
+          "id>='5' and id<'a'",
+          "id>='a' and id<'f'",
+          "id>='f' and id<'m'",
+          "id>='m' and id<'r'",
+          "id>='r' and id<'w'",
+          "id>='w'"
+        ]
+      },
+      "tableName": "elearning.te_teacher",
+      "columns": "id,orgid,name,username,sex,telephone,company,teacherlevelid,teacherlevelname,teachercatalogid,teachercatalogname,cost,description,tags,type,isdeleted,status,istop,contribution,satisfaction,satisfactionlevel,avator,auditorid,auditorname,auditdate,auditfeedback,optcontentcount,optduration,knowledgecount,createuserid,createusername,createdate,updateuserid,updateusername,updatedate,userid,workingtime,reccoefficient,issyncstatus"
+    }
+  ],
+  "writer": {
+    "name": "hivewriter",
+    "tableName": "elearning.te_teacher",
+    "columns": "id,orgid,name,username,sex,telephone,company,teacherlevelid,teacherlevelname,teachercatalogid,teachercatalogname,cost,description,tags,type,isdeleted,status,istop,contribution,satisfaction,satisfactionlevel,avator,auditorid,auditorname,auditdate,auditfeedback,optcontentcount,optduration,knowledgecount,createuserid,createusername,createdate,updateuserid,updateusername,updatedate,userid,workingtime,reccoefficient,issyncstatus",
+    "writeMode": "replace"
+  }
+}

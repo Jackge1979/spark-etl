@@ -1,0 +1,13 @@
+package com.yxt.bigdata.etl.connector.base.component
+
+import org.apache.spark.sql.DataFrame
+
+trait ETLWriter {
+  val tableName: String
+
+  val columns: Array[String]
+
+  val workersNum: Int
+
+  def saveTable(dataFrame: DataFrame): Unit
+}

@@ -1,0 +1,29 @@
+{
+  "reader": [
+    {
+      "name": "mysqlreader",
+      "connection": {
+        "username": "elearning",
+        "password": "password01!",
+        "jdbcUrl": "jdbc:oracle:thin:@//172.17.125.202:1521/yxtdb",
+        "driver": "oracle.jdbc.driver.OracleDriver"
+      },
+      "predicates": "1=1,1=1,1=1,1=1",
+      "tableName": "elearning.core_organizationprofile",
+      "columns": "id,orgName"
+    }
+  ],
+  "writer": {
+    "name": "mysqlwriter",
+    "connection": {
+      "username": "yxt",
+      "password": "pwdasdwx",
+      "jdbcUrl": "jdbc:mysql://172.17.128.172:3306/test?autoReconnect=true&useSSL=false",
+      "driver": "com.mysql.jdbc.Driver"
+    },
+    "tableName": "org_test",
+    "columns": "pid,orgName",
+    "writeMode": "replace",
+    "batchSize": 1000
+  }
+}

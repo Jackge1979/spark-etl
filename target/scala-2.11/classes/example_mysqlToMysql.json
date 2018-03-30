@@ -1,0 +1,41 @@
+{
+  "reader": [
+    {
+      "name": "oraclereader",
+      "connection": {
+        "username": "devops",
+        "password": "TWSuNrtPByVpqBd1",
+        "jdbcUrl": "jdbc:oracle:thin:@//10.200.60.70:1521/yxtdb",
+        "driver": "com.mysql.jdbc.Driver"
+      },
+      "predicates": {
+        "type": "custom",
+        "rules": [
+          "id<'5'",
+          "id>='5' and id<'a'",
+          "id>='a' and id<'f'",
+          "id>='f' and id<'m'",
+          "id>='m' and id<'r'",
+          "id>='r' and id<'w'",
+          "id>='w'"
+        ]
+      },
+      "tableName": "userprofile",
+      "columns": "id,orgid,username,cnname,email,mobile,userno,sex,birthday,userclasslevelid,userclasslevelno,userclasslevelname,userappfeaturegroupid,currentpositionid,isrecommend,currentpositionname,departmentid,departmentname,status,jobname,belongdepartmentid,belongdepartmentname,isnew,useridentitytype,createdate,updatedate,lastlogintime,isadmin,isemailvalidated,ismobilevalidated,isautonymvalidated,lastlogindate,mobilelastlogindate,usertype,approvestatus,islockedout,isenabled,isregisteruser,expireddate,deviceid"
+    }
+  ],
+  "writer": {
+    "name": "mysqlwriter",
+    "connection": {
+      "username": "yxt",
+      "password": "pwdasdwx",
+      "jdbcUrl": "jdbc:mysql://172.17.128.172:3306/test",
+      "driver": "com.mysql.jdbc.Driver"
+    },
+    "tableName": "userprofile_test",
+    "columns": "id,orgid,username,cnname,email,mobile,userno,sex,birthday,userclasslevelid,userclasslevelno,userclasslevelname,userappfeaturegroupid,currentpositionid,isrecommend,currentpositionname,departmentid,departmentname,status,jobname,belongdepartmentid,belongdepartmentname,isnew,useridentitytype,createdate,updatedate,lastlogintime,isadmin,isemailvalidated,ismobilevalidated,isautonymvalidated,lastlogindate,mobilelastlogindate,usertype,approvestatus,islockedout,isenabled,isregisteruser,expireddate,deviceid",
+    "writeMode": "insert",
+    "batchSize": 1024,
+    "workersNum": 20
+  }
+}

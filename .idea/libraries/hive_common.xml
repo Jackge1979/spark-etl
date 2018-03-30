@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="hive-common">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/hive-common.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
